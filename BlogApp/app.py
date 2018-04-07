@@ -9,24 +9,6 @@ file_path = os.path.abspath(os.getcwd())+"/blog.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+file_path
 db = SQLAlchemy(app)
 
-# Video (Layout) -> 
-#     _API_KEY = "AIzaSyAr78B7PUvpUqXlHsBAL8kEd3BRNOp6aEw" -> 0
-#     view_count = "" -> 1
-#     like_count = "" -> 2
-#     dislike_count = "" -> 3
-#     favourite_count = "" -> 4
-#     comment_count = "" -> 5
-#     url = "" -> 6
-# , default=",,,,,"
-
-# Location_Manager (Layout) ->
-#     _API_KEY = "AIzaSyB1hPDbNRwBqg-msjWUq7anQOW4IynsP7M" -> 0
-#     latitude = "" -> 1
-#     longitude = "" -> 2
-#     accuracy = "" -> 3 , default=",,"
-
-
-# Defines the Post model which would be displayed on the website!
 class Post(db.Model):
     unique_id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     title = db.Column(db.String(100))
@@ -71,15 +53,46 @@ class Post(db.Model):
             }
         }
 
-@app.route('/test')
+@app.route('/admin/test')
 def test():
     posts = Post.query.all()
     post_details = [post.returnObject() for post in posts]
     return jsonify({'posts': post_details, 'total': len(post_details)})
 
 @app.route('/')
+@app.route('/home')
 def index():
     posts = Post.query.all()
+    return render_template('index.html', posts=posts)
+
+@app.route('/filter/by/location/<location>')
+def index_location_filter(location):
+    posts = Post.query.filter_by(location=location).all()
+    return render_template('index.html', posts=posts)
+
+@app.route('/filter/by/name_of_party/<name_of_party>')
+def index_party_name_filter(name_of_party):
+    posts = Post.query.filter_by(name_of_party=name_of_party).all()
+    return render_template('index.html', posts=posts)
+
+@app.route('/filter/by/name_of_party')
+def party_bridge_view():
+    posts = db.session.query(Post.name_of_party.distinct().label("name_of_party"))
+    return render_template('party_bridge.html', posts=posts)
+
+@app.route('/filter/by/location')
+def location_bridge_view():
+    posts = db.session.query(Post.location.distinct().label("location"))
+    return render_template('location_bridge.html', posts=posts)
+
+@app.route('/sort/by/timestamp/')
+def index_timestamp_sort():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('index.html', posts=posts)
+    
+@app.route('/sort/by/upvote_counter/')
+def index_upvote_counter_sort():
+    posts = Post.query.order_by(Post.upvote_counter.desc()).all()
     return render_template('index.html', posts=posts)
 
 @app.route('/about')
@@ -95,6 +108,14 @@ def post(post_id):
 @app.route('/add')
 def add():
     return render_template('add.html')
+
+@app.route('/post/delete/<int:post_id>')
+def deletepost(post_id):
+    post = Post.query.filter_by(unique_id=post_id).one()
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect(url_for('index'))
 
 @app.route('/addpost', methods=["POST"])
 def addpost():

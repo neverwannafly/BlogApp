@@ -46,33 +46,79 @@
       </div>
     </nav>
 
-    <!-- Page Header -->
-    <header class="masthead" style="background-image: url(' {{ url_for('static', filename='about-bg.jpg') }} ')">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="page-heading">
-              <h1>About Me</h1>
-              <span class="subheading">This is what I do.</span>
+    <header class="masthead" style="background-image: url(' {{ url_for('static', filename='contact-bg.jpg') }} ')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="page-heading">
+                <h1>Select Possible locations!</h1>
+                <span class="subheading">This feature is still under development!.</span>
+                </div>
             </div>
-          </div>
+            </div>
         </div>
-      </div>
     </header>
 
-    <!-- Main Content -->
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe nostrum ullam eveniet pariatur voluptates odit, fuga atque ea nobis sit soluta odio, adipisci quas excepturi maxime quae totam ducimus consectetur?</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius praesentium recusandae illo eaque architecto error, repellendus iusto reprehenderit, doloribus, minus sunt. Numquam at quae voluptatum in officia voluptas voluptatibus, minus!</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut consequuntur magnam, excepturi aliquid ex itaque esse est vero natus quae optio aperiam soluta voluptatibus corporis atque iste neque sit tempora!</p>
-        </div>
-      </div>
-    </div>
-
-    <hr>
+    <center>
+            <style>
+                /* Style The Dropdown Button */
+                .dropbtn {
+                    background-color: #4CAF50;
+                    color: white;
+                    padding: 16px;
+                    font-size: 16px;
+                    border: none;
+                    cursor: pointer;
+                }
+                
+                /* The container <div> - needed to position the dropdown content */
+                .dropdown {
+                    position: relative;
+                    display: inline-block;
+                }
+                
+                /* Dropdown Content (Hidden by Default) */
+                .dropdown-content {
+                    display: none;
+                    position: absolute;
+                    background-color: #f9f9f9;
+                    min-width: 160px;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index: 1;
+                }
+                
+                /* Links inside the dropdown */
+                .dropdown-content a {
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: block;
+                }
+                
+                /* Change color of dropdown links on hover */
+                .dropdown-content a:hover {background-color: #f1f1f1}
+                
+                /* Show the dropdown menu on hover */
+                .dropdown:hover .dropdown-content {
+                    display: block;
+                }
+                
+                /* Change the background color of the dropdown button when the dropdown content is shown */
+                .dropdown:hover .dropbtn {
+                    background-color: #3e8e41;
+                }
+                </style>
+                
+                <div class="dropdown">
+                  <button class="dropbtn">Pick Location</button>
+                  <div class="dropdown-content">
+                    {% for post in posts %}  
+                        <a href="{{ url_for('index_location_filter', location=post.location) }}">{{post.location}}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+        </center>
 
     <!-- Footer -->
     <footer>
@@ -110,15 +156,6 @@
         </div>
       </div>
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Bootstrap core JavaScript -->
-    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
-
-    <!-- Custom scripts for this template -->
-    <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
-
 
   </body>
 
