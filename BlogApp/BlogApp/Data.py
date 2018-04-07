@@ -4,5 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 import datetime
 
-from Models import Models
-from Models import init_database
+from Models import Post
+from Models import Location_Manager
+from Models import Video
+from InitDB import init_database

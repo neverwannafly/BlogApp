@@ -1,9 +1,8 @@
-# Defines the models that are to be used in the project!
-
-# Imports
 from sqlalchemy import Column, String, Integer, ForeignKey, Numeric, Date
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from Model import Model
+
+Model = declarative_base()
 
 # Defines the Post model which would be displayed on the website!
 class Post(Model):
@@ -11,7 +10,7 @@ class Post(Model):
     __tablename__ = "post"
     unique_id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     title = Column(String(100), default="NO_TITLE")
-    content = Column(String(1000, default=""))
+    content = Column(String(1000), default=" ")
     upvote_counter = Column(Integer)
     downvote_counter = Column(Integer)
     time_stamp = Column(Date)
@@ -30,7 +29,7 @@ class Post(Model):
             # Add Location and Video to this too!
         }
 
-class Location_Manager:
+class Location_Manager(Model):
     # Class attributes
     _API_KEY = "AIzaSyB1hPDbNRwBqg-msjWUq7anQOW4IynsP7M"
     __tablename__ = "location_manager"
@@ -38,6 +37,8 @@ class Location_Manager:
     latitude = Column(Integer)
     longitude = Column(Integer)
     accuracy = Column(Integer)
+    Post = Column(Integer, ForeignKey('Post.unique_id'))
+
     # Methods
     def returnObject(self):
         return {
@@ -47,7 +48,7 @@ class Location_Manager:
             "accuracy" : self.accuracy,
         }
 
-class Video: 
+class Video(Model): 
     # Class attributes
     _API_KEY = "AIzaSyAr78B7PUvpUqXlHsBAL8kEd3BRNOp6aEw"
     __tablename__ = "video"
@@ -58,6 +59,7 @@ class Video:
     favourite_count = Column(String)
     comment_count = Column(String)
     url = Column(String)
+    post = Column(Integer, ForeignKey('post.unique_id'))
 
     # Methods
     def returnObject(self):
