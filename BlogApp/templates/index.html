@@ -39,6 +39,9 @@
               <a class="nav-link" href="{{ url_for('index') }}">Home</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('add') }}">Add Post</a>
+              </li>
+            <li class="nav-item">
               <a class="nav-link" href="{{ url_for('about') }}">About</a>
             </li>
           </ul>
@@ -144,13 +147,14 @@
               <h2 class="post-title">
                 {{ post.title }}
               </h2>
-              <h3 class="post-subtitle">
-                Problems look mighty small from 150 miles up
-              </h3>
+              <div>
+                  <iframe width="466" height="262" src="{{ post.video.split(',')[0] }}" frameborder="5" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      
+                </div>
             </a>
             <p class="post-meta">Posted on
               
-              {{ post.timestamp.strftime("%B %d, %Y") }}</p>
+              {{ post.timestamp.strftime("%B %d, %Y") }} &emsp; &emsp; Upvotes: {{post.upvote_counter}} &emsp; Downvotes: {{post.downvote_counter}}</p>
           </div>
           <hr>
           {% endfor %}

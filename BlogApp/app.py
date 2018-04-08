@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import os
 from datetime import datetime
+import requests
 
 app = Flask(__name__)
 
@@ -22,15 +23,13 @@ class Post(db.Model):
     video = db.Column(db.String(500))
     
     def returnObject(self):
-        self.location = self.location.split(",")
-        self.video = self.video.split(",")
+        video = self.video.split(",")
 
-        if len(self.location) != 3:
-            self.location = ",,,"
-        if len(self.video) != 6:
-            self.video = ",,,,,,"
+        if len(video) != 5:
+            video = ",,,,,,"
 
         return {
+            "image" : self.image,
             "unique_id" : self.unique_id,
             "title" : self.title,
             "name_of_party" : self.name_of_party,
@@ -38,18 +37,13 @@ class Post(db.Model):
             "upvote_counter" : self.upvote_counter,
             "downvote_counter" : self.downvote_counter,
             "timestamp" : self.timestamp,
-            "location" : {
-                "latitude" : self.location[0],
-                "longitude" : self.location[1],
-                "accuracy" : self.location[2],
-            },
+            "location" : self.location,
             "video" : {
-                "view_count" : self.video[0],
-                "like_count" : self.video[1],
-                "dislike_count" : self.video[2],
-                "favourite_count" : self.video[3],
-                "comment_count" : self.video[4],
-                "url" : self.video[5],
+                "view_count" : video[0],
+                "like_count" : video[1],
+                "dislike_count" : video[2],
+                "favourite_count" : video[3],
+                "url" : video[4],
             }
         }
 
@@ -144,8 +138,21 @@ def addpost():
 
     # Set getVideo and getLocation methods here and use string interpolation to send them back!
 
-    location = ",,"
-    video = ",,,,,"
+    # Video Manager
+
+    video_id = video[32:]
+    response = requests.get('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=' + video_id + '&key=AIzaSyAr78B7PUvpUqXlHsBAL8kEd3BRNOp6aEw')
+
+    response_json = response.json()
+    view_count = response_json['items'][0]['statistics']['viewCount']
+    like_count = response_json['items'][0]['statistics']['likeCount']
+    dislike_count = response_json['items'][0]['statistics']['dislikeCount']
+    favourite_count = response_json['items'][0]['statistics']['favoriteCount']
+
+    video = video[:24] + "embed/" + video[32:]
+    video = video + "," + view_count + "," + like_count + "," + dislike_count + "," + favourite_count
+
+    print(video)
 
     post = Post(
         title=title,
