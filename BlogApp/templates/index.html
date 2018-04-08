@@ -41,6 +41,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('add') }}">Add Post</a>
               </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('test') }}">Check DataBase</a>
+                </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('about') }}">About</a>
             </li>
@@ -201,6 +204,10 @@
 
     <!-- Custom scripts for this template -->
     <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
+
+    <!-- Infinite Scroll -->
+
+    <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script> 
 
   </body>
 

@@ -1,14 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
-import os
 from datetime import datetime
+
 import requests
+import os
 
 app = Flask(__name__)
 
 file_path = os.path.abspath(os.getcwd())+"/blog.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+file_path
 db = SQLAlchemy(app)
+
+app.config.update(
+    DEBUG = True,
+    SECRET_KEY = 'secret_xxx'
+)
 
 class Post(db.Model):
     unique_id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
@@ -47,13 +53,20 @@ class Post(db.Model):
             }
         }
 
+@app.route('/')
+def login():
+    return render_template('login.html')
+
+@app.route('/admin/login', methods=["GET", "POST"])
+def admin_login():
+    return render_template('admin_login.html')
+    
 @app.route('/admin/test')
 def test():
     posts = Post.query.all()
     post_details = [post.returnObject() for post in posts]
     return jsonify({'posts': post_details, 'total': len(post_details)})
 
-@app.route('/')
 @app.route('/home')
 def index():
     posts = Post.query.all()
@@ -138,6 +151,15 @@ def addpost():
 
     # Set getVideo and getLocation methods here and use string interpolation to send them back!
 
+    # Location Autocomplete
+
+    search = location
+    location_response = requests.get("https://maps.googleapis.com/maps/api/place/autocomplete/json?input="+search+"&types=(cities)&key=AIzaSyB1hPDbNRwBqg-msjWUq7anQOW4IynsP7M")
+    location_response = location_response.json()
+    location = location_response['predictions'][0]['description']
+
+    print(location)
+
     # Video Manager
 
     video_id = video[32:]
@@ -151,8 +173,6 @@ def addpost():
 
     video = video[:24] + "embed/" + video[32:]
     video = video + "," + view_count + "," + like_count + "," + dislike_count + "," + favourite_count
-
-    print(video)
 
     post = Post(
         title=title,
@@ -172,4 +192,4 @@ def addpost():
     return redirect(url_for('index'))
 
 if __name__=="__main__":
-    app.run(debug=True)
+    app.run()
