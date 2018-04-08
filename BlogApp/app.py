@@ -105,6 +105,22 @@ def post(post_id):
     date_posted = post.timestamp.strftime('%B %d, %Y')
     return render_template('post.html', post=post, date_posted=date_posted)
 
+@app.route('/post/<int:post_id>/upvote')
+def upvote_post(post_id):
+    post = Post.query.filter_by(unique_id=post_id).one()
+    post.upvote_counter += 1
+    db.session.commit()
+    date_posted = post.timestamp.strftime('%B %d, %Y')
+    return render_template('post.html', post=post, date_posted=date_posted)
+
+@app.route('/post/<int:post_id>/downvote')
+def downvote_post(post_id):
+    post = Post.query.filter_by(unique_id=post_id).one()
+    post.downvote_counter += 1
+    db.session.commit()
+    date_posted = post.timestamp.strftime('%B %d, %Y')
+    return render_template('post.html', post=post, date_posted=date_posted)
+
 @app.route('/add')
 def add():
     return render_template('add.html')

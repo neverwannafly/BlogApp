@@ -1,6 +1,3 @@
-
-
-# Defines the Post model which would be displayed on the website!
 #Reference Layout for videomanager and locationamanger using string interpolation!
 
 # Video (Layout) -> 

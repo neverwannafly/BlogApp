@@ -76,14 +76,24 @@
         </div>
       </div>
     </article>
+    
     <hr>
+    <center>
+      Upvotes : {{post.upvote_counter}} &emsp; &emsp; Downvotes : {{post.downvote_counter}}
+    </center>
     <br><br><br>
 
     <!-- Make this only accessible to super user -->
     <center>
-      <a href="{{ url_for('deletepost', post_id=post.unique_id) }}"><button> 
-        Delete Post!
+      <a href="{{ url_for('upvote_post', post_id=post.unique_id) }}"><button  class="btn btn-success"> 
+        Upvote!!
       </button></a>
+      <a href="{{ url_for('downvote_post', post_id=post.unique_id) }}"><button  class="btn btn-warning"> 
+          Downvote!!
+        </button></a>
+        <a href="{{ url_for('deletepost', post_id=post.unique_id) }}"><button class="btn btn-danger" > 
+            Delete Post!
+          </button></a>
     </center>
 
     <!-- Footer -->
