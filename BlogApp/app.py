@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
+from plotly.offline import plot
+from plotly.graph_objs import Scatter
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from markupsafe import Markup
 
 import requests
 import os
@@ -190,6 +193,17 @@ def addpost():
     db.session.commit()
 
     return redirect(url_for('index'))
+
+@app.route('/analytics')
+def analytics():
+    posts = db.session.query(Post.name_of_party.distinct().label("name_of_party"))
+    return render_template('analytics.html', posts=posts)
+
+@app.route('/analytics/<name_of_party>')
+def analytics_party(name_of_party):
+    posts = Post.query.filter_by(name_of_party=name_of_party).all()
+    my_plot_div = plot([Scatter(x=[post.upvote_counter for post in posts], y=[i+1 for i in range(len(posts))])], output_type='div')
+    return render_template('graph_result.html', div_placeholder=Markup(my_plot_div))
 
 @app.errorhandler(404)
 def page_not_found(e):

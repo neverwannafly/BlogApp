@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>fable: evaluation_project</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='dropdown.css') }}" rel="stylesheet">
+</head>
+<body>
+        <div class="jumbotron">
+                <center>
+                        <div class="jumbotron">
+                                <h1 class="display-4"> Choose Party to see trends for! </h1>
+                                <br><br>
+                                
+
+                                <div class="dropdown">
+                                    <button class="dropbtn">Party</button>
+                                        <div class="dropdown-content">
+                                        {% for post in posts %}
+                                            <a href="{{url_for('analytics_party', name_of_party=post.name_of_party)}}">{{ post.name_of_party }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                        </div>
+                        
+                </center>
+                </p>
+                
+            </div>
+            <center>
+                <a href="{{url_for('index')}}"><button class="btn btn-success btn-md">Home! </button></a>
+            </center>
+</body>
+</html>
