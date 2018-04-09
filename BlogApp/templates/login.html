@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>fable: evaluation_project</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div class="jumbotron">
+        <center>
+                <div class="jumbotron">
+                        <h1 class="display-4">Welcome to our website!</h1>
+                        <br><br>
+                        <a class="btn btn-primary btn-lg" href="{{url_for('admin_login', error_code=0)}}" role="button">Admin login</a> <br><br>
+                        <a class="btn btn-primary btn-lg" href="{{url_for('index')}}" role="button">See website content without login!</a>
+                        <br><br>
+                        NOTE : ONLY ADMINS CAN ADD, DELETE POSTS AND VIEW ANALYTICS DATA AND DATABASE!<br>
+                        However, anonymous users can still upvote/downvote posts!
+                </div>
+        </center>
+        </p>
+    </div>
+</body>
+</html>
