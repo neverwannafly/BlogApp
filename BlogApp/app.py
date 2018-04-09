@@ -24,7 +24,7 @@ db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = ''
+login_manager.login_view = 'login'
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,10 +49,8 @@ class Post(db.Model):
     
     def returnObject(self):
         video = self.video.split(",")
-
         if len(video) != 5:
             video = ",,,,,,"
-
         return {
             "image" : self.image,
             "unique_id" : self.unique_id,
@@ -120,7 +118,7 @@ def test():
 @login_required
 def index():
     posts = Post.query.all()
-    return render_template('index.html', posts=posts)
+    return render_template('index.html', posts=posts, name=current_user.username)
 
 @app.route('/filter/by/location/<location>')
 @login_required
@@ -262,7 +260,7 @@ def analytics():
 @login_required
 def analytics_party(name_of_party):
     posts = Post.query.filter_by(name_of_party=name_of_party).all()
-    my_plot_div = plot([Scatter(x=[post.upvote_counter for post in posts], y=[i+1 for i in range(len(posts))])], output_type='div')
+    my_plot_div = plot([Scatter(x=[i+1 for i in range(len(posts))], y=[post.upvote_counter for post in posts])], output_type='div')
     return render_template('graph_result.html', div_placeholder=Markup(my_plot_div))
 
 @app.errorhandler(404)
