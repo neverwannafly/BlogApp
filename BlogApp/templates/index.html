@@ -28,31 +28,50 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="{{ url_for('index') }}"> Welcome {{name}} </a>
+        <a class="navbar-brand" href="{{ url_for('index') }}"> 
+          {% if current_user.is_authenticated %}
+          Welcome {{name}}
+          {% else %}
+          Start Exploring!
+          {% endif %}
+        </a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fa fa-bars"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-            </li>
-            <li class="nav-item">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+              </li>
+
+              {% if current_user.is_authenticated %}
+
+              <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('add') }}">Add Post</a>
               </li>
-              <li class="nav-item">
+                <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('test') }}">Check DataBase</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('analytics') }}">Analytics</a>
                   </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('about') }}">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('logout') }}">Logout!</a>
-              </li>
+
+                  {% endif %}
+
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                  </li>
+
+                  {% if current_user.is_authenticated %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout!</a>
+                  </li>
+                  {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('admin_login') }}">Login!</a>
+                  </li>
+                  {% endif %}
           </ul>
         </div>
       </div>

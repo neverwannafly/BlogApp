@@ -1,4 +1,4 @@
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user 
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user, AnonymousUserMixin 
 from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
 from wtforms import StringField, PasswordField
 from wtforms.validators import InputRequired, Length
@@ -19,17 +19,24 @@ app = Flask(__name__)
 file_path = os.path.abspath(os.getcwd())+"/blog.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+file_path
 app.config['SECRET_KEY'] = 'Secret_Key'
-Bootstrap(app)
 db = SQLAlchemy(app)
+
+Bootstrap(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-class User(UserMixin, db.Model):
+class Admin(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(80))
+
+class Anonymous(AnonymousUserMixin):
+    def __init__(self):
+        self.username = 'Guest'
+
+login_manager.anonymous_user = Anonymous
 
 class LoginForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
@@ -72,7 +79,7 @@ class Post(db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return Admin.query.get(int(user_id))
 
 @app.route('/')
 def login():
@@ -83,10 +90,10 @@ def admin_login():
     form = LoginForm()
     if request.method == "POST":
         if form.validate_on_submit():
-            user = User.query.filter_by(username=form.username.data).first()
-            if user:
-                if check_password_hash(user.password, form.password.data):
-                    login_user(user)
+            admin = Admin.query.filter_by(username=form.username.data).first()
+            if admin:
+                if check_password_hash(admin.password, form.password.data):
+                    login_user(admin)
                     return redirect(url_for('index'))
                 else:
                     error_code = 1
@@ -115,61 +122,51 @@ def test():
     return jsonify({'posts': post_details, 'total': len(post_details)})
 
 @app.route('/home')
-@login_required
 def index():
     posts = Post.query.all()
-    return render_template('index.html', posts=posts, name=current_user.username)
+    return render_template('index.html', posts=posts, current_user=current_user)
 
 @app.route('/filter/by/location/<location>')
-@login_required
 def index_location_filter(location):
     posts = Post.query.filter_by(location=location).all()
     return render_template('index.html', posts=posts)
 
 @app.route('/filter/by/name_of_party/<name_of_party>')
-@login_required
 def index_party_name_filter(name_of_party):
     posts = Post.query.filter_by(name_of_party=name_of_party).all()
     return render_template('index.html', posts=posts)
 
 @app.route('/filter/by/name_of_party')
-@login_required
 def party_bridge_view():
     posts = db.session.query(Post.name_of_party.distinct().label("name_of_party"))
     return render_template('party_bridge.html', posts=posts)
 
 @app.route('/filter/by/location')
-@login_required
 def location_bridge_view():
     posts = db.session.query(Post.location.distinct().label("location"))
     return render_template('location_bridge.html', posts=posts)
 
 @app.route('/sort/by/timestamp/')
-@login_required
 def index_timestamp_sort():
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('index.html', posts=posts)
     
 @app.route('/sort/by/upvote_counter/')
-@login_required
 def index_upvote_counter_sort():
     posts = Post.query.order_by(Post.upvote_counter.desc()).all()
     return render_template('index.html', posts=posts)
 
 @app.route('/about')
-@login_required
 def about():
     return render_template('about.html')
 
 @app.route('/post/<int:post_id>')
-@login_required
 def post(post_id):
     post = Post.query.filter_by(unique_id=post_id).one()
     date_posted = post.timestamp.strftime('%B %d, %Y')
     return render_template('post.html', post=post, date_posted=date_posted)
 
 @app.route('/post/<int:post_id>/upvote')
-@login_required
 def upvote_post(post_id):
     post = Post.query.filter_by(unique_id=post_id).one()
     post.upvote_counter += 1
@@ -178,7 +175,6 @@ def upvote_post(post_id):
     return render_template('post.html', post=post, date_posted=date_posted)
 
 @app.route('/post/<int:post_id>/downvote')
-@login_required
 def downvote_post(post_id):
     post = Post.query.filter_by(unique_id=post_id).one()
     post.downvote_counter += 1

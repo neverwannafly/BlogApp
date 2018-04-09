@@ -14,10 +14,10 @@
                         <h1 class="display-4">Welcome to our website!</h1>
                         <br><br>
                         <a class="btn btn-primary btn-lg" href="{{url_for('admin_login', error_code=0)}}" role="button">Admin login</a> <br><br>
-                        <a class="btn btn-primary btn-lg disabled" href="" role="button">Login with Facebook! (Under Development!)</a>
-                </div>
-                <div class="container">
-                    Currently website only supports admin login! Facebook login coming soon!
+                        <a class="btn btn-primary btn-lg" href="{{url_for('index')}}" role="button">See website content without login!</a>
+                        <br><br>
+                        NOTE : ONLY ADMINS CAN ADD, DELETE POSTS AND VIEW ANALYTICS DATA AND DATABASE!<br>
+                        However, anonymous users can still upvote/downvote posts!
                 </div>
         </center>
         </p>
