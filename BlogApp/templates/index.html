@@ -166,6 +166,9 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             <br><hr><br>
+
+
+
           {% for post in posts %}
 
           <!-- Edit show details here, basically table view -->
@@ -185,7 +188,9 @@
               {{ post.timestamp.strftime("%B %d, %Y") }} &emsp; &emsp; Upvotes: {{post.upvote_counter}} &emsp; Downvotes: {{post.downvote_counter}}</p>
           </div>
           <hr>
+
           {% endfor %}
+
     <!-- Footer -->
     <footer>
       <div class="container">
@@ -231,8 +236,6 @@
     <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
 
     <!-- Infinite Scroll -->
-
-    <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script> 
 
   </body>
 
