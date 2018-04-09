@@ -48,11 +48,11 @@ class Post(db.Model):
             "timestamp" : self.timestamp,
             "location" : self.location,
             "video" : {
-                "view_count" : video[0],
-                "like_count" : video[1],
-                "dislike_count" : video[2],
-                "favourite_count" : video[3],
-                "url" : video[4],
+                "url" : video[0],
+                "view_count" : video[1],
+                "like_count" : video[2],
+                "dislike_count" : video[3],
+                "favourite_count" : video[4],
             }
         }
 
