@@ -1,54 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>fable: evaluation_project</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body>
-    <div class="jumbotron">
-        <center>
-                <div class="jumbotron">
-                        <h1 class="display-4">Admin Portal</h1>
-                        <br><br>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-                        <div class="container">
-                                <div class="row">
-                                  <div class="col-lg-4 col-lg-4 mx-auto">
-                                    <form name="addForm" id="addForm" method="POST" action="{{ url_for('admin_login') }}" novalidate>
-                                      <div class="control-group">
-                                        <div class="form-group floating-label-form-group controls">
-                                          <label>Username : </label>
-                                          <input type="text" class="form-control" placeholder="Enter Title" id="title" required data-validation-required-message="Please enter username" name="username">
-                                          <p class="help-block text-danger"></p>
-                                        </div>
-                                      </div>
-            
-                                      <div class="control-group">
-                                        <div class="form-group floating-label-form-group controls">
-                                          <label>Password : </label>
-                                          <input type="password" class="form-control" placeholder="Enter Password" id="title" required data-validation-required-message="Please enter password" name="password">
-                                          <p class="help-block text-danger"></p>
-                                        </div>
-                                      </div>
-                                      <br>
-                                      <div id="success"></div>
-                                      <div class="form-group">
-                                            <button type="submit" class="btn btn-success" id="sendMessageButton">Login!</button>
-                                          </div>
-                                    </form>
-                                  </div>
-                                </div>
-                              </div>
+{% block title %}
+Login
+{% endblock %}
 
-                        <a class="btn btn-warning btn-lg" href=" {{url_for('login')}} " role="button">Go Back</a>
-                        </p>
-                      </div>
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='signin.css')}}">
+{% endblock %}
 
-        </center>
-        </p>
-    </div>
-</body>
-</html>
+{% block content %}
+    <div class="container">
+
+      <div><center>
+        {% if error_code==1 %}
+          <div>Invalid Password!</div>
+        {% endif %}
+        {% if error_code==2 %}
+        <div>This admin doesnt exist on database!</div>
+        {% endif %}
+        {% if error_code==3 %}
+        <div>There's a problem with submitting this form! Please try again!</div>
+        {% endif %}
+      </center></div> <br>
+
+      <form class="form-signin" method="POST" action="/admin/login">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.username) }}
+        {{ wtf.form_field(form.password) }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+
+    </div> <!-- /container -->
+{% endblock %}

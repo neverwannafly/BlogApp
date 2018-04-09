@@ -13,11 +13,12 @@
                 <div class="jumbotron">
                         <h1 class="display-4">Welcome to our website!</h1>
                         <br><br>
-                        <a class="btn btn-primary btn-lg disabled" href="{{url_for('admin_login')}}" role="button">Admin login (Under Development)</a> <br><br>
-                        <a class="btn btn-primary btn-lg" href=" {{url_for('index')}} " role="button">Use website as anonymous!</a>
-                        </p>
-                      </div>
-
+                        <a class="btn btn-primary btn-lg" href="{{url_for('admin_login', error_code=0)}}" role="button">Admin login</a> <br><br>
+                        <a class="btn btn-primary btn-lg disabled" href="" role="button">Login with Facebook! (Under Development!)</a>
+                </div>
+                <div class="container">
+                    Currently website only supports admin login! Facebook login coming soon!
+                </div>
         </center>
         </p>
     </div>
