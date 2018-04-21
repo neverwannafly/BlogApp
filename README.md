@@ -11,6 +11,7 @@ write the following commands in terminal (while being in BlogApp directory) ->
 ```
 $python3
 >>> from app import db, Admin
+>>> from werkzeug.security import generate_password_hash
 >>> admin = Admin(username="YOUR_USERNAME", password=generate_password_hash("YOUR_PASSWORD", method='sha256'))
 >>> db.session.add(admin)
 >>> db.session.commit()
