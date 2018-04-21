@@ -1,7 +1,5 @@
-# Evaluation Project
-
 # Running the project ->
-clone the project or download zip
+clone the project or download zip<br>
 Run the following command in terminal to run the app (while being in the BlogApp directory) ->
 ```
 $source ../venv/bin/activate
@@ -17,5 +15,5 @@ $python3
 >>> db.session.add(admin)
 >>> db.session.commit()
 ```
-
+<hr>
 ### @Neverwannafly~
