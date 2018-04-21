@@ -15,5 +15,6 @@ $python3
 >>> db.session.add(admin)
 >>> db.session.commit()
 ```
-<hr>
+<hr> </hr>
+
 ### @Neverwannafly~
