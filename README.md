@@ -1,4 +1,4 @@
-#BlogApp
+# BlogApp
 ## Setting up the VirtualEnv
 #### For UNIX based devices(linux/mac)
 To be able to run the project, you should either be having libraries mentioned in requirnments.txt in your PC(The same version) or you can create your virtual env with all these libraries in few simple steps! (Recommended)<br>
